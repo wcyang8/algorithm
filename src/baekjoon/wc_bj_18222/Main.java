@@ -1,5 +1,13 @@
 package baekjoon.wc_bj_18222;
 
+/**
+ * k보다 큰 2^n를 잡아서
+ * k = 2^(n-1) + h 라고 하면
+ * whatChar(k) = whatChar(2^(n-1)+h) = 1 - whatChar(h) 가 된다.
+ * 재귀를 통해 whatChar(1) 까지 도달하면 0을 리턴한다.
+ * 시간복잡도는 O(logN)
+ */
+
 import java.util.Scanner;
 
 public class Main {
