@@ -45,14 +45,8 @@ public class Main {
 		Queue<Integer> q = new ArrayDeque<Integer>();
 		
 		q.add(0); q.add(0);
-		q.add(0); q.add(M-1);
-		q.add(N-1); q.add(0);
-		q.add(N-1); q.add(M-1);
 		
 		visited[0][0] = true;
-		visited[0][M-1] = true;
-		visited[N-1][0] = true;
-		visited[N-1][M-1] = true;
 		
 		while(!q.isEmpty()) {
 			int ci = q.poll();

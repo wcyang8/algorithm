@@ -33,7 +33,6 @@ public class Main {
 		}
 		System.out.print(sb);
 	}
-
 	/**
 	 * A^B를 구하는 함수
 	 * @param B : 제곱할 수
