@@ -1,5 +1,12 @@
 package baekjoon.wc_bj_1717;
 
+/**
+ * n, m
+ * 
+ * @author SSAFY
+ *
+ */
+
 public class Main {
 
 	public static void main(String[] args) {
