@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Solution {
+public class Solution_1238_양우철 {
 
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

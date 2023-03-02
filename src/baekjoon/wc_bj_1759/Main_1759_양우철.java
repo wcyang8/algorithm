@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Main_1759_양우철 {
 
 	static String aeiou = "aeiou";
 	static int L, C;
