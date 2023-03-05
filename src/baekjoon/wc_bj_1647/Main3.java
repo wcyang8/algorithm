@@ -7,26 +7,24 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-//class pair implements Comparable<pair> {
-//	int dest;
-//	int cost;
-//
-//	public pair(int dest, int cost) {
-//		super();
-//		this.dest = dest;
-//		this.cost = cost;
-//	}
-//
-//	@Override
-//	public int compareTo(pair o) {
-//		return (this.cost > o.cost) ? 1 : (this.cost == o.cost) ? 0 : -1;
-//	}
-//
-//}
+class pair implements Comparable<pair> {
+	int dest;
+	int cost;
 
-public class Main2 {
+	public pair(int dest, int cost) {
+		super();
+		this.dest = dest;
+		this.cost = cost;
+	}
 
-	static int[] house;
+	@Override
+	public int compareTo(pair o) {
+		return (this.cost > o.cost) ? 1 : (this.cost == o.cost) ? 0 : -1;
+	}
+
+}
+
+public class Main3 {
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -35,11 +33,10 @@ public class Main2 {
 		int N = Integer.parseInt(st.nextToken()); // N 입력
 		int M = Integer.parseInt(st.nextToken()); // M 입력
 
-		house = new int[N];		// 서로소 집합 생성
-		List<pair>[] road = new LinkedList[N]; // 간선 생성
+		boolean[] house = new boolean[N];		// visited 배열 생성
+		List<pair>[] road = new LinkedList[N];	// 간선 리스트 배열 생성
 		for (int i = 0; i < N; i++) {
-			house[i] = i;
-			road[i] = new LinkedList<pair>(); // 간선 초기화
+			road[i] = new LinkedList<pair>();	// 간선 리스트 생성
 		}
 
 		int A, B, C;
@@ -55,37 +52,24 @@ public class Main2 {
 		}
 		PriorityQueue<pair> selected = new PriorityQueue<>();	// 선택된 점과 연결된 간선을 넣어줄 우선순위 큐
 
+        house[0] = true;
 		int sum = 0;	// 최소 신장 트리 비용 총 합
 		for (pair p : road[0])		// 0부터 시작
 			selected.add(p);		// 0과 연결된 간선 전부 pq에 add
-		int maxCost = 0;			// 연결된 간선 중 가장 높은 유지비를 가지는 간선
+		int maxCost = 0;			// 연결된 간선 중 가장 높은 유지비
 		for (int cnt = 1; cnt < N; cnt++) { // 점이 N개 선택될 때까지 반복
-			while (!selected.isEmpty() 	// pq에 원소가 있는 동안
-					&& findSet(selected.peek().dest) == 0) {	// 간선의 목적지가 0과 연결된 정점이면
-				selected.poll();		// pop하고 다음 간선
+			while (!selected.isEmpty()	// pq에 원소가 있는 동안
+					&& house[selected.peek().dest]) {	// 간선의 목적지가 0과 연결된 정점이면
+				selected.poll();
 			}
 			pair temp = selected.poll();		// temp : 선택된 간선, temp.dest = 선택된 정점
-			house[temp.dest] = 0;				// union (이미 조건 검증)
-			for (pair p : road[temp.dest])		// 인접리스트를 통해 다음 정점에 연결된 간선들 
-				if(house[p.dest] != 0) selected.add(p);			// 
-			sum += temp.cost;
-			maxCost = Math.max(maxCost, temp.cost);
+			house[temp.dest] = true;			// visited 처리
+			for (pair p : road[temp.dest])		// 인접리스트를 통해 다음 정점에 연결된 간선들 pq에 넣기
+				if(!house[p.dest]) selected.add(p);		// 방문 안한 것만
+			sum += temp.cost;					// MST의 비용 총 합
+			maxCost = Math.max(maxCost, temp.cost);		// 가장 높은 유지비 저장
 		}
-		sum -= maxCost;
-		System.out.println(sum);
-	}
-
-	static int findSet(int v) {
-		if (house[v] != v)
-			return house[v] = findSet(house[v]);
-		else
-			return v;
-	}
-
-	static boolean union(int a, int b) {
-		if (findSet(a) == findSet(b))
-			return false;
-		house[b] = a;
-		return true;
+		sum -= maxCost;				// 가장 높은 유지비만 빼준다.
+		System.out.println(sum);	// 출력.
 	}
 }

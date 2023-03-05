@@ -7,22 +7,22 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-class pair implements Comparable<pair> {
-	int dest;
-	int cost;
-
-	public pair(int dest, int cost) {
-		super();
-		this.dest = dest;
-		this.cost = cost;
-	}
-
-	@Override
-	public int compareTo(pair o) {
-		return (this.cost > o.cost) ? 1 : (this.cost == o.cost) ? 0 : -1;
-	}
-
-}
+//class pair implements Comparable<pair> {
+//	int dest;
+//	int cost;
+//
+//	public pair(int dest, int cost) {
+//		super();
+//		this.dest = dest;
+//		this.cost = cost;
+//	}
+//
+//	@Override
+//	public int compareTo(pair o) {
+//		return (this.cost > o.cost) ? 1 : (this.cost == o.cost) ? 0 : -1;
+//	}
+//
+//}
 
 public class Main {
 
