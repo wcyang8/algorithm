@@ -1,7 +1,12 @@
 package baekjoon.wc_bj_1162;
 
 /**
- * N까지 
+ * idea
+ * 1. 다익스트라로 N까지 최단경로 구함.
+ * 
+ * 2. 각 dist 함수는 경로를 전부 저장하고, k개를 뺀 결과값을 저장한다.
+ * 
+ * 3. 1개씩 빼면서 최단거리를 갱신한다.
  */
 
 import java.io.BufferedReader;
@@ -54,7 +59,7 @@ class node implements Comparable<node>{
 		Collections.sort(route);
 		System.out.println(route);
 		int result = totalDist;
-		for(int i = route.size() - 1; i >= route.size() - k; i--) {
+		for(int i = route.size() - 1; i >= route.size() - k && i >= 0; i--) {
 			result -= route.get(i);
 		}
 		return result;
