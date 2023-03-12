@@ -31,7 +31,7 @@ public class Main {
 		int T = Integer.parseInt(br.readLine());
 
 		for (int tc = 1; tc <= T; tc++) {
-			boolean res = true;
+			boolean res = true; // 이분 그래프인지 결과값 저장할 변수
 			st = new StringTokenizer(br.readLine());
 
 			int V = Integer.parseInt(st.nextToken());
@@ -55,26 +55,26 @@ public class Main {
 
 			// BFS
 			Queue<Integer> q = new ArrayDeque<>();
-			for (int v = 0; v < V; v++) {
-				if(vNs[v] != 0) continue;
-				q.add(v);
-				vNs[v] = 1;
-				while (!q.isEmpty()) {
+			for (int v = 0; v < V; v++) {		// 비연결 그래프도 칠할 수 있음.
+				if(vNs[v] != 0) continue;		// BFS로 칠해진 정점은 패스
+				q.add(v);		// 안 칠해진 정점부터 시작.
+				vNs[v] = 1;		// 1번 집합으로 채움.
+				while (!q.isEmpty()) {			// BFS 시작
 					int cur = q.poll();
-					for (int next : adjList[cur]) {
-						if (vNs[next] == 0) {
+					for (int next : adjList[cur]) {		// 인접 정점 탐색
+						if (vNs[next] == 0) {			// 안칠해진 경우
 							vNs[next] = 3 - vNs[cur];
 							q.add(next);
 							continue;
 						}
-						if (vNs[cur] == vNs[next]) {
+						if (vNs[cur] == vNs[next]) {	// 반대집합인 경우
 							res = false;
 							break;
 						}
 					}
-					if (!res)
-						break;
+					if (!res)break;
 				}
+				if(!res) break;
 			}
 			sb.append(res ? "YES" : "NO").append('\n');
 		}

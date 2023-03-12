@@ -72,21 +72,23 @@ public class Main {
 			}
 		} // 다익스트라 끝
 			// 1~K개 까지 하나씩 지우며 최단거리 갱신
-		for (int k = 0; k <= K; k++) {
-			System.out.println(Arrays.toString(dist));
+		System.out.println(Arrays.toString(dist));
+		for (int k = 0; k < K; k++) {
 			int temp;
 			for (int i = 0; i < N; i++) {
 				dist[i] = sumK(route[i], k);
 			}
-			if(k == K) break;
+			//if(k == K) break;
 			for (int i = 0; i < N; i++) {
 				for (int[] edge : adjList[i]) {
 					if (dist[edge[0]] > dist[i] + edge[1]) {
 						dist[edge[0]] = dist[i] + edge[1];
-						route[i].add(edge[1]);
+						if(route[edge[0]].size() == 0)route[edge[0]].addAll(route[i]);
+						route[edge[0]].add(edge[1]);
 					}
 				}
 			}
+			System.out.println(Arrays.toString(dist));
 		}
 		System.out.println(dist[N-1]);
 	}
