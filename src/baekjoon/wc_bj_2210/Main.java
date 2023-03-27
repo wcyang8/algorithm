@@ -47,14 +47,23 @@ public class Main {
 		// 탐색
 		for(int i = 0; i < 5; i++) {
 			for(int j = 0; j < 5; j++) {
-				dfs(i,j,new StringBuilder());
+				move(i, j, board[i][j], 1);
 			}
 		}
+		System.out.println(s.size());
 	}
-	private static Set<> dfs(int i, int j, int k) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(board[i][j]);
-		
+	private static void move(int i, int j, int cur, int len) {
+		if(len == 6) {
+			s.add(cur);
+			return;
+		}
+		for(int k = 0; k < 4; k++) {
+			int ni = i + d[k][0];
+			int nj = j + d[k][1];
+			if(ni >= 0 && ni < 5 && nj >= 0 && nj < 5) {
+				move(ni, nj, cur * 10 + board[ni][nj], len+1);
+			}
+		}
 	}
 
 }
