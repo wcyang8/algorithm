@@ -46,10 +46,10 @@ public class Main {
 
 		int L = Integer.parseInt(br.readLine());
 
-		for(boolean[] s : board) {
-			for(boolean i : s) System.out.print((i?1:0) + " ");
-			System.out.println();
-		}
+//		for(boolean[] s : board) {
+//			for(boolean i : s) System.out.print((i?1:0) + " ");
+//			System.out.println();
+//		}
 		System.out.println();
 		// 뱀 이동 시작
 		int dir = 0;
