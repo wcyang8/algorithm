@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 /**
@@ -27,7 +28,7 @@ public class Main {
 
 		int[][] dist = new int[N][K]; // 1부터 i까지 최단거리를 저장할 배열 (K개에 따라)
 
-		Arrays.fill(dist, Integer.MAX_VALUE); // int 최대값으로 초기화
+		for(int i = 0; i < N; i++) Arrays.fill(dist[i], Integer.MAX_VALUE); // int 최대값으로 초기화
 
 		List<int[]>[] adjList = new ArrayList[N]; // 인접 리스트 배열 초기화
 		for (int i = 0; i < N; i++) {
@@ -46,6 +47,13 @@ public class Main {
 		}
 		
 		
+		PriorityQueue<int[]> pq = new PriorityQueue<>((o1,o2)-> o1[2] - o2[2]);
+		
+		pq.add(new int[] {0,0,0});
+		dist[0][0] = 0;
+		while(!pq.isEmpty()) {
+			int[] cur = pq.poll();
+		}
 	}
 
 }
