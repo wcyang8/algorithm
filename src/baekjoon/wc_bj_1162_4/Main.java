@@ -1,4 +1,4 @@
-package baekjoon.wc_bj_1162_3;
+package baekjoon.wc_bj_1162_4;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -9,29 +9,12 @@ import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 /**
- * 클래스 사용
- * 
- * 
+ * 풀이
+ * 1. 도로를 i개 지웠을 때 최소 거리 vs 도로를 i+1개 지웠을 때 최소 거리
  * 
  * @author SSAFY
  *
  */
-
-class move implements Comparable<move>{
-	int vertex;
-	int num;
-	long dist;
-	public move(int vertex, int num, long dist) {
-		super();
-		this.vertex = vertex;
-		this.num = num;
-		this.dist = dist;
-	}
-	@Override
-	public int compareTo(move o) {
-		return Long.compare(this.dist, o.dist);
-	}
-}
 
 public class Main {
 
@@ -64,29 +47,29 @@ public class Main {
 		}
 		
 		
-		PriorityQueue<move> pq = new PriorityQueue<>();
+		PriorityQueue<long[]> pq = new PriorityQueue<>((o1,o2)-> Long.compare(o1[2], o2[2]));
 		
 		long ans = -1;
-		pq.add(new move(0,0,0));		// [정점][지운 수][거리]
+		pq.add(new long[] {0,0,0});		// [정점][지운 수][거리]
 		dist[0][0] = 0;
 		while(!pq.isEmpty()) {
-			move cur = pq.poll();
+			long[] cur = pq.poll();
 			
-			if(dist[cur.vertex][cur.num] < cur.dist) continue;		// 이 한 줄이 시간초과 없애줌
-																// 일반 다익과 차이 : 최단거리로 방문하고 또 방문하는 경우가 생김.
-			if(cur.vertex == N-1) {
-				ans = cur.dist;
+			if(dist[(int)cur[0]][(int)cur[1]] < cur[2]) continue;
+			
+			if(cur[0] == N-1) {
+				ans = cur[2];
 				break;
 			}
 			
-			for(int[] next : adjList[cur.vertex]) {
-				if(dist[next[0]][cur.num] > cur.dist + next[1]) {
-					dist[next[0]][cur.num] = cur.dist + next[1];
-					pq.add(new move(next[0], cur.num, cur.dist+next[1]));
+			for(int[] next : adjList[(int)cur[0]]) {
+				if(dist[next[0]][(int)cur[1]] > cur[2] + next[1]) {
+					dist[next[0]][(int)cur[1]] = cur[2] + next[1];
+					pq.add(new long[] {next[0], cur[1], cur[2]+next[1]});
 				}
-				if(cur.num < K && dist[next[0]][cur.num+1] > cur.dist) {
-					dist[next[0]][cur.num+1] = cur.dist;
-					pq.add(new move(next[0], cur.num+1, cur.dist));
+				if(cur[1] < K && dist[next[0]][(int)cur[1]+1] > cur[2]) {
+					dist[next[0]][(int)cur[1]+1] = cur[2];
+					pq.add(new long[] {next[0], cur[1]+1, cur[2]});
 				}
 			}
 		}
