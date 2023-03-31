@@ -26,6 +26,11 @@ import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+class pair{
+	int first;
+	int second;
+}
+
 public class Main {
 
 	static int[][] d = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
