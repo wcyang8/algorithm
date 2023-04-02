@@ -67,7 +67,6 @@ public class Main {
 		int M = Integer.parseInt(br.readLine());
 		
 		Arrays.sort(cost);
-		//System.out.println(Arrays.toString(cost));
 		
 		List<Integer> roomNum = new ArrayList<>();
 		
@@ -92,7 +91,6 @@ public class Main {
 			M += cost[0].cost;
 			roomNum.remove(roomNum.size()-1);
 		}
-//		System.out.println(roomNum.toString());
 		
 //		System.out.println(M);
 		// 첫자리부터 갈아끼우기
