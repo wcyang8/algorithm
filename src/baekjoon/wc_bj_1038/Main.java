@@ -1,30 +1,41 @@
 package baekjoon.wc_bj_1038;
 
 /**
- * 한 자리 수 중에 감소하는 수 9개
+ * 풀이
  * 
- * 두 자리 수 중에 감소하는 수 8 7 6 5 4 3 2 1 0
+ * 1. 가장 앞자리가 j인 i자리 감소하는 수의 개수
  * 
- * 세 자리 수 중에 감소하는 수 
+ * 2. 
+ * 
+ * 
  */
 
 import java.util.Scanner;
 
 public class Main {
 
+	static int num, N;
+
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		
-		int N = sc.nextInt();
-		
+
+		N = sc.nextInt();
+
 		int[][] dp = new int[20][10];
 		
 		for(int i = 1; i < 10; i++) dp[1][i] = 1;
 		
+		int num = 0;
 		for(int i = 2; i < 20; i++) {
 			for(int j = 1; j < 10; j++) {
 				for(int k = 1; k < j; k++) {
 					dp[i][j] += dp[i-1][k];
+				}
+				num += dp[i][j];
+				if(num > N) {
+					num -= dp[i][j];
+					// 가장 앞자리가 j인 i자리 감소하는 수 중에 있다는 뜻
+					
 				}
 			}
 		}
@@ -34,6 +45,22 @@ public class Main {
 			}
 			System.out.println();
 		}
+
+		for (int i = 1; num < N; i++) {
+			comb(i, 0, 0);
+		}
+	}
+
+	private static void comb(int k, int len, int start) {
+		if(num == N) return;
+		if(k == len) {
+			++num;
+			return;
+		}
+		for(int i = 9; i >= 0; i++) {
+			
+		}
+
 	}
 
 }
