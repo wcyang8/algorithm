@@ -17,6 +17,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 
+	static long p = 1_234_567_891;
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
@@ -27,13 +28,24 @@ public class Main {
 		
 		long[] fact = new long[N+1];
 		
+//		System.out.println(pow(5,3));
+		
 		fact[0] = 1;
 		for(int i = 1; i <= N; i++) {
-			fact[i] = (fact[i-1]*i);
-//			System.out.println(fact[i]);
+			fact[i] = (fact[i-1]*i) % p;
 		}
-		long res = (fact[N] / fact[K])/ fact[N-K];
+		long res = ((fact[N] * pow(fact[K] , p-2)) % p)*pow(fact[N-K],p-2)%p;
 		System.out.println(res);
 	}
-
+	static long pow(long x, long time) {
+		if(time == 0) return 1;
+		if(time == 1) return x;
+		
+		long half = time/2;
+		long odd = time%2;
+		long down = pow(x, half);
+//		System.out.println(x+" "+half+" "+odd+" "+down);
+		
+		return ((down * down) % p)*pow(x,odd)%p;
+	}
 }
