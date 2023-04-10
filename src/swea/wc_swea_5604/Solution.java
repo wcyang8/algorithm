@@ -40,7 +40,7 @@ public class Solution {
 		long n = 1;
 		while(X/n >= 1) {
 			long curS = X / n;
-			long curR = X*10 % n;
+			long curR = X % (n/10);
 			long curRR = curS - (X/(n*10))*10;
 			res += curS * num[9] * (n/10) + curRR*curR + (curRR>0?(num[(int)curRR-1]*(n/10)):0);
 			n *= 10;
