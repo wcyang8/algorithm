@@ -2,6 +2,8 @@ package baekjoon.wc_bj_21609;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 /**
@@ -38,7 +40,7 @@ import java.util.StringTokenizer;
 public class Main {
 
 	static int[][] map, dir = {{1,0},{0,1},{-1,0},{0,-1}};
-	static int N, M, max;
+	static int N, M, max, point;
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -55,22 +57,35 @@ public class Main {
 			}
 		}
 		
-		System.out.println(findBG());
+		int pos = findBG();
+		getPoint(map[pos/N][pos%N], pos/N, pos%N);
 		
+		for(int i = 0; i < N; i++) {
+			for(int j = 0; j < N; j++) {
+				System.out.print(map[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println(point);
 	}
 
 	static int findBG() {
 		boolean[][] visited = new boolean[N][N];
 		
 		int max = 0;
+		int rbmax = 0;
 		int pos = 0;
 		for(int i = 0; i < N; i++) {
 			for(int j = 0; j < N; j++) {
 				if(map[i][j] > 0 && !visited[i][j]) {
-					int temp = DFS(map[i][j], i,j, visited);
+					int[] temp = DFS(map[i][j], i,j, visited);
 					visited[i][j] = true;
-					if(max > temp) {
-						max = temp;
+					if(max < temp[0]) {
+						max = temp[0];
+						rbmax = temp[1];
+						pos = i * N + j;
+					}else if(max == temp[0] && rbmax < temp[1]) {
+						rbmax = temp[1];
 						pos = i * N + j;
 					}
 				}
@@ -79,8 +94,10 @@ public class Main {
 		return pos;
 	}
 	
-	private static int DFS(int k, int i, int j, boolean[][] visited) {
+	private static int[] DFS(int k, int i, int j, boolean[][] visited) {
 		int sum = 1;
+		int rbsum = 0;
+		if(map[i][j] == 0) ++rbsum;
 		visited[i][j] = true;
 		for(int[] d: dir) {
 			int ni = i + d[0];
@@ -88,16 +105,41 @@ public class Main {
 			
 			if(ni >= 0 && ni < N && nj >= 0 && nj < N && !visited[ni][nj]) {
 				if(map[ni][nj] == k || map[ni][nj] == 0) {
-					sum += DFS(k, ni, nj, visited);
+					int[] temp = DFS(k, ni, nj, visited);
+					sum += temp[0];
+					rbsum += temp[1];
 				}
 			}
 		}
-		return sum;
+		visited[i][j] = false;
+		return new int[] {sum, rbsum};
 	}
 
-//	static int getPoint() {
-//		
-//	}
+	static void getPoint(int k, int i, int j) {
+		Queue<Integer> q = new ArrayDeque<>();
+		q.add(i);
+		q.add(j);
+		map[i][j] = -2;
+		int sum = 1;
+		while(!q.isEmpty()) {
+			int ci = q.poll();
+			int cj = q.poll();
+			for(int[] d: dir) {
+				int ni = ci + d[0];
+				int nj = cj + d[1];
+				
+				if(ni >= 0 && ni < N && nj >= 0 && nj < N && map[ni][nj] != -2) {
+					if(map[ni][nj] == k || map[ni][nj] == 0) {
+						map[ni][nj] = -2;
+						q.add(ni);
+						q.add(nj);
+						++sum;
+					}
+				}
+			}
+		}
+		point += sum * sum;
+	}
 	
 	static void rotate() {
 		
