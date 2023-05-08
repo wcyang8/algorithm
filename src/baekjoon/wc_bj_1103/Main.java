@@ -19,58 +19,53 @@ import java.util.StringTokenizer;
  * 
  * 
  * @author SSAFY
+=======
+ * 
+ * @author 양우철
  *
  */
 
 public class Main {
 
-	static int[][] visited[], d = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 	static String[] board;
-	static int N, M, max = 1;
-
-	public static void main(String[] args) throws Exception {
+	static int[][] visited, d = {{1,0},{0,1},{-1,0},{0,-1}};
+	static int N, M, max;
+	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-
+		
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-
-		visited = new int[N][M][4];
-
+		
 		board = new String[N];
-
-		for (int i = 0; i < N; i++) {
+		
+		visited = new int[N][M];
+		
+		for(int i = 0; i < N; i++) {
 			board[i] = br.readLine();
 		}
-
-		for (int i = 0; i < 4; i++)
-			visited[0][0][i] = 1;
-
-		backT(0, 0, 0);
-
-		System.out.println(max == Integer.MAX_VALUE ? -1 : max);
+		
+		visited[0][0] = 1;
+		max = 1;
+		DFS(0,0);
+		System.out.println(max > 2500 ? -1: max);
 	}
-
-	private static void backT(int i, int j, int k) {
-		System.out.println(i + " " + j);
-		// 4방 X만큼 탐색
+	private static void DFS(int i, int j) {
+		if(max > 2500) return;
 		int X = board[i].charAt(j) - '0';
-
-		for (int nk = 0; nk < 4; nk++) {
-			int ni = i + X * d[nk][0];
-			int nj = j + X * d[nk][1];
-
-			if (ni >= 0 && ni < N && nj >= 0 && nj < M && board[ni].charAt(nj) != 'H') {
-				if (visited[ni][nj][nk] > 0 && nk == k) {
-					max = Integer.MAX_VALUE;
-					return;
-				} else {
-					visited[ni][nj][nk] = Math.max(visited[ni][nj][nk], visited[i][j][k] + 1);
-					max = Math.max(max, visited[ni][nj][nk]);
-					backT(ni, nj, nk);
+		for(int k = 0; k < 4; k++) {
+			int ni = i + d[k][0] * X;
+			int nj = j + d[k][1] * X;
+			
+			if(ni >= 0 && ni < N && nj >= 0 && nj < M && board[ni].charAt(nj) != 'H') {
+				if(visited[ni][nj] < visited[i][j] + 1) {
+					visited[ni][nj] = visited[i][j] + 1;
+					max = Math.max(max, visited[ni][nj]);
+					DFS(ni,nj);
 				}
 			}
 		}
+		
 	}
 
 }
