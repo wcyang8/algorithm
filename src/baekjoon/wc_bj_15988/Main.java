@@ -42,7 +42,7 @@ public class Main {
 			}
 
 			long[][] temp = pow(mat, N-3);
-			sb.append((temp[0][0] * 4 + temp[0][1] * 2 + temp[0][2] * 1)%R).append("\n");
+			sb.append(temp[0][0] * 4 + temp[0][1] * 2 + temp[0][2] * 1).append("\n");
 		}
 		System.out.println(sb);
 	}
