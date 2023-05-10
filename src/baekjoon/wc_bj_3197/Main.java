@@ -38,10 +38,10 @@ public class Main {
 
 		fill(swan[0][0], swan[0][1]);
 		fill(swan[1][0], swan[1][1]);
-//		while (true) {
-			melt();
+		while (true) {
 			++day;
-//		}
+			melt();
+		}
 	}
 
 	private static void melt() {
@@ -49,53 +49,61 @@ public class Main {
 		Queue<Integer> q2 = new ArrayDeque<>();
 		for (int i = 0; i < R; i++) {
 			for (int j = 0; j < C; j++) {
-				if (lake[i][j] == 0) {
+				if (lake[i][j] == 0) { // 얼음 주변의 구역 확인
 					for (int[] d : dir) {
 						int ni = i + d[0];
 						int nj = j + d[1];
 
 						if (ni >= 0 && ni < R && nj >= 0 && nj < C) {
-							if(lake[ni][nj] > 0) {
-							if (lake[i][j] == 0) {
-								lake[i][j] = -lake[ni][nj];
-								q.add(i);
-								q.add(j);
-							}else if(lake[i][j] <= -2){
-								lake[i][j] = -lake[ni][nj];
-								q.add(i);
-								q.add(j);
-								q2.add(i);
-								q2.add(j);
-							}
+							if (lake[ni][nj] > 0) { // 0보다 크면
+								if (lake[i][j] == 0) { // 0이면 처음 방문한 것
+									lake[i][j] = -lake[ni][nj];
+									q.add(i);
+									q.add(j);
+								} else if (lake[i][j] <= -2) { // 0이 아니면 두번째 방문
+//									lake[i][j] = -lake[ni][nj];
+//									q.add(i);
+//									q.add(j);
+									q2.add(i);
+									q2.add(j);
+									break;
+								}
+							} else if (lake[ni][nj] <= -1) {
+								if (lake[i][j] <= -2 && lake[i][j] != lake[ni][nj]) {
+									q2.add(i);
+									q2.add(j);
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-		while(!q.isEmpty()) {
+		while (!q.isEmpty()) {
 			int ci = q.poll();
 			int cj = q.poll();
 			lake[ci][cj] = Math.abs(lake[ci][cj]);
 		}
-		System.out.println(q2);
-		while(!q2.isEmpty()) {
+//		System.out.println(q2);
+		while (!q2.isEmpty()) {
 			int ci = q2.poll();
 			int cj = q2.poll();
 			fill(ci, cj);
 		}
-		print();
-	}
-	private static void print() {
-		for(int i = 0; i < R; i++) {
-			for(int j = 0; j < C; j++) {
-				System.out.print(lake[i][j] + " ");
-			}
-			System.out.println();
-		}
+//		print();
 	}
 
+//	private static void print() {
+//		for (int i = 0; i < R; i++) {
+//			for (int j = 0; j < C; j++) {
+//				System.out.print(lake[i][j] + " ");
+//			}
+//			System.out.println();
+//		}
+//	}
+
 	private static void fill(int i, int j) {
+//		System.out.println("fill arg :" + lake[i][j]);
 		Queue<Integer> q = new ArrayDeque<>();
 		q.add(i);
 		q.add(j);
@@ -107,15 +115,16 @@ public class Main {
 				int ni = ci + d[0];
 				int nj = cj + d[1];
 				if (ni >= 0 && ni < R && nj >= 0 && nj < C) {
-					if(lake[ni][nj] == 0) continue;		// 얼음
-					else if (lake[ni][nj] == 1) {		// 물
+					if (lake[ni][nj] == 0)
+						continue; // 얼음
+					else if (lake[ni][nj] == 1) { // 물
 						lake[ni][nj] = lake[i][j];
 						q.add(ni);
 						q.add(nj);
-					} else if (lake[ni][nj] != lake[i][j]) {	// 다른 백조의 공간
-						print();
-						System.out.println("where i, j : "+i+" "+j);
-						System.out.println("where ni, nj : "+ni+" "+nj);
+					} else if (lake[ni][nj] != lake[i][j]) { // 다른 백조의 공간
+//						print();
+//						System.out.println("where i, j : " + i + " " + j);
+//						System.out.println("where ni, nj : " + ni + " " + nj);
 						System.out.println(day);
 						System.exit(0);
 					}
