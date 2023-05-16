@@ -1,8 +1,15 @@
 package baekjoon.wc_bj_14003;
 
+/**
+ * 새로 들어오는데 len보다 작은 곳에서 갱신
+ * 
+ * 
+ */
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
@@ -22,13 +29,14 @@ public class Main {
 		
 		int[] dp = new int[N+1];
 		
-		Deque<Integer> dq = new ArrayDeque<Integer>();
-		dq.addLast(A[1]);
+		Deque<Integer> res = new ArrayDeque<Integer>();
+		Deque<Integer> temp = new ArrayDeque<Integer>();
+		res.addLast(A[1]);
 		dp[1] = A[1];
 		int len = 1;
 		for(int i = 2; i <= N; i++) {
 			if(A[i] > dp[len]){
-				dq.add(A[i]);
+				res.add(A[i]);
 				dp[++len] = A[i];
 				continue;
 			}
@@ -40,8 +48,8 @@ public class Main {
 				else right = mid;
 			}
 			if(left == len) {
-				dq.pollLast();
-				dq.addLast(A[i]);
+				res.pollLast();
+				res.addLast(A[i]);
 			}
 			dp[left] = A[i];
 		}
@@ -50,8 +58,8 @@ public class Main {
 		
 		System.out.println(len);
 		
-		while(!dq.isEmpty()) {
-			System.out.print(dq.pollFirst()+" ");
+		while(!res.isEmpty()) {
+			System.out.print(res.pollFirst()+" ");
 		}
 		System.out.println();
 	}
