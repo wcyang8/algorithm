@@ -49,17 +49,19 @@ public class Main {
                     right = mid - 1;
                 }else{
                     if(mid == i){
+                        // 찾은 수의 왼쪽도 같은 값이라면 true
                         if(i > 0 && j != i - 1 && A[i-1] == value) {
 //                            System.out.println(i + " " + j + " " + mid);
 //                            System.out.println(A[i] + " = " + A[j] + " + " + A[mid]);
                             return true;
                         }
+                        // 찾은 수의 오른쪽도 같은 값이라면 true
                         if(i < N - 1 && j != i + 1 && A[i+1] == value) {
 //                            System.out.println(i + " " + j + " " + mid);
 //                            System.out.println(A[i] + " = " + A[j] + " + " + A[mid]);
                             return true;
                         }
-                        return false;
+                        break;
                     }
 //                    System.out.println(i + " " + j + " " + mid);
 //                    System.out.println(A[i] + " = " + A[j] + " + " + A[mid]);
