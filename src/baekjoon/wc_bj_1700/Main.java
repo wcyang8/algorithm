@@ -19,7 +19,7 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        int[] elec = new int[K];
+//        int[] elec = new int[K];
 
         List<Integer>[] history = new LinkedList[K+1];
 
@@ -30,7 +30,7 @@ public class Main {
         st = new StringTokenizer(br.readLine());
 
         Queue<Integer> q = new ArrayDeque<>();
-        for(int i = 0; i < K; i++){
+        for(int i = 1; i <= K; i++){
             int num = Integer.parseInt(st.nextToken());
             history[num].add(i);
             q.add(num);
@@ -43,19 +43,22 @@ public class Main {
         int ans = 0;
         // N개 검색해서
         for(int i = 0; i < K; i++) {
-//            Queue<Integer> temp = new ArrayDeque<>();
-//            while(!pq.isEmpty()){
-//                temp.add(pq.poll());
-//            }
-//            while(!temp.isEmpty()){
-//                int x = temp.poll();
+            // history가 변경되었을 때 pq가 갱신되지 않는 문제가 생김.
+            // 이를 해결하기 위한 코드.
+            Queue<Integer> temp = new ArrayDeque<>();
+            while(!pq.isEmpty()){
+                temp.add(pq.poll());
+            }
+            while(!temp.isEmpty()){
+                int x = temp.poll();
 //                System.out.print(x);
-//                pq.add(x);
-//            }
+                pq.add(x);
+            }
 //            System.out.println();
 
             int cur = q.poll();
             history[cur].remove(0);
+
 
             // 현재 실행하는 전기용품이 있으면?
             // 다음 전기용품
@@ -64,6 +67,7 @@ public class Main {
             // 멀티탭이 꽉차있으면
             if(pq.size() >= N){
                 // 멀티탭에서 1개를 뽑는다
+//                System.out.println("pop : "+pq.poll());
                 pq.poll();
                 // 뽑은 횟수 +1
                 ans++;
