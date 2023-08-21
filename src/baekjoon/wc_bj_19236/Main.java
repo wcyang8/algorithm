@@ -6,12 +6,13 @@ import java.util.StringTokenizer;
 
 public class Main {
     static int[][] dir = {{-1,0},{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1}};
+    static int[][][] state;
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer st;
 
-        int[][][] state = new int[4][4][2];
+        state = new int[4][4][2];
 
         for(int i = 0; i < 4; i++){
             st = new StringTokenizer(br.readLine());
@@ -24,11 +25,21 @@ public class Main {
         // 최댓값 구하기
         int max = 0;
 
-        // 상어 위치와 방향으로 simul
-        max = simul(state,0 ,0);
+        // 상어 위치로 simul
+        max = simul(0 ,0);
+
+        testPrint();
+        // 정답 출력
+        System.out.println(max);
     }
 
-    private static int simul(int[][][] state, int si, int sj) {
+    private static int simul(int si, int sj) {
+        // 상어가 그 칸의 물고기를 먹는다.
+        int eat = state[si][sj][0];
+        int sd = state[si][sj][1];
+        state[si][sj][0] = 0;
+        state[si][sj][1] = -1;
+        testPrint();
         // 물고기 1번부터 이동
         for(int k = 1; k <= 16; k++){
             int ci = -1;
@@ -43,16 +54,20 @@ public class Main {
                     }
                 }
             }
-            // 45도 회전
+            // 상어가 먹은 경우
+            if(ci == -1 && cj == -1) continue;
+
+            // 현재 물고기의 방향
             int cd = state[ci][cj][1];
 
+            // 45도 회전
             for(int n = 0; n < 8; n++){
                 int ni = ci + dir[cd][0];
                 int nj = cj + dir[cd][1];
                 // 벽이 아니고
                 if(ni >= 0 && ni < 4 && nj >= 0 && nj < 4){
                     // 상어가 아니면
-                    if(ni != si && nj != sj){
+                    if(ni != si || nj != sj){
                         break;
                     }
                 }
@@ -62,11 +77,39 @@ public class Main {
             }
             // 갈 수 있는 곳이 없으면 그대로
             if(cd != -1){
-                // 있으면 move
+                // 있으면
+                // 현재 위치의 방향을 cd로 바꾼다.
+                state[ci][cj][1] = cd;
+
+                // move & swap
+                int[] temp = new int[2];
+                temp[0] = state[ci + dir[cd][0]][cj+dir[cd][1]][0];
+                temp[1] = state[ci + dir[cd][0]][cj+dir[cd][1]][1];
+
+                state[ci + dir[cd][0]][cj+dir[cd][1]][0] = state[ci][cj][0];
+                state[ci + dir[cd][0]][cj+dir[cd][1]][1] = state[ci][cj][1];
+
+                state[ci][cj][0] = temp[0];
+                state[ci][cj][1] = temp[1];
             }
         }
+        testPrint();
+        int max = 0;
+        int nsi = si + dir[sd][0];
+        int nsj = sj + dir[sd][1];
         // 상어가 움직일 수 있나?
-        // 없으면 break;
+        while(nsi >= 0 && nsi < 4 && nsj >= 0 && nsj < 4 && state[nsi][nsj][0] != 0){
+            // 움직일 수 있으면
+            int t1 = state[nsi][nsj][0];
+            int t2 = state[nsi][nsj][1];
+            // 다음 자리의 물고기를 먹으러 간다.
+            max = Math.max(max, simul(nsi, nsj));
+            state[nsi][nsj][0] = t1;
+            state[nsi][nsj][1] = t2;
+            nsi += dir[sd][0];
+            nsj += dir[sd][1];
+        }
+        return eat + max;
     }
 
     // 방향을 정해주는 메소드
@@ -79,5 +122,19 @@ public class Main {
 //            if(checkShark())
 //        }
 //    }
+    private static void testPrint(){
+        System.out.println("====테스트 시작====");
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+//                if(i == si && j == sj){
+//                    System.out.print("S ");
+//                    continue;
+//                }
+                System.out.print(state[i][j][0] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("====테스트 끝====");
+    }
 
 }
