@@ -1,37 +1,45 @@
 package baekjoon.wc_bj_17404;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
 public class Main {
-    static String[] intToMonth = {"","Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
-    static Map<String,Integer> month = new HashMap<>();
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int m1 = Integer.parseInt(st.nextToken());
-        int d1 = Integer.parseInt(st.nextToken());
-        int m2 = Integer.parseInt(st.nextToken());
-        int d2 = Integer.parseInt(st.nextToken());
-        String week = br.readLine(); // 요일
-        init();
-        int weeki = month.get(week) - 1;
 
-        int days = countDays(m2, d2) - countDays(m1,d1);
+        int N = Integer.parseInt(br.readLine());
 
-        System.out.println(days/7 + (days%7 + (weeki - 1))/7);
-    }
-    static int[] dayOfMonth = {0,31,29,31,30,31,30,31,31,30,31,30,31};
-    private static int countDays(int month, int day){
-        int count = 0;
-        for(int m = 1; m < month; m++){
-            count += dayOfMonth[m];
+        int[][] color = new int[N][3];
+
+        // 색깔을 받아보자
+        for(int i = 0; i < N; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for(int j = 0; j < 3; j++){
+                color[i][j] = Integer.parseInt(st.nextToken());
+            }
         }
-        count += day;
-        return count;
-    }
-    private static void init(){
-        for(int i = 1; i <= 7; i++){
-            month.put(intToMonth[i],i);
+
+        int[][] dp = new int[N][3];
+
+        int min = 1_000_001;
+        // 첫 집 색깔
+        for(int k = 0; k < 3; k++){
+            dp[0][k] = color[0][k];
+            dp[0][(k+1)%3] = 1001;
+            dp[0][(k+2)%3] = 1001;
+
+            // dp 채우기
+            for(int i = 1; i < N; i++){
+                for(int j = 0; j < 3; j++){
+                    dp[i][j] = color[i][j] + Math.min(dp[i-1][(j+1)%3], dp[i-1][(j+2)%3]);
+                }
+            }
+
+            min = Math.min(min, dp[N-1][(k+1)%3]);
+            min = Math.min(min, dp[N-1][(k+2)%3]);
         }
+
+        System.out.println(min);
     }
 }

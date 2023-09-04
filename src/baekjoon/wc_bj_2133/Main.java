@@ -25,7 +25,12 @@ public class Main {
         dp[2] = 3;
 
         for(int i = 4; i <= N; i += 2){
-            dp[i] = dp[i-4] * 2 + dp[i-2] * 3;
+            dp[i] = dp[i-2] * 3;
+            int k = 2;
+            while(i >= 2 * k){
+                dp[i] += dp[i - 2 * k] * 2;
+                k++;
+            }
         }
 
         System.out.println(dp[N]);
