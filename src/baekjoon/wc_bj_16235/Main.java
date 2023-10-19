@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static int[][] dir = {{1,0},{0,1},{-1,0},{0,-1}};
+    static int[][] dir = {{1,0},{0,1},{-1,0},{0,-1},{1,1},{-1,-1},{1,-1},{-1,1}};
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -89,7 +89,7 @@ public class Main {
                         // 영양분이 된다
                         if (tree[i][j].get(t) < 0) {
                             ground[i][j] -= tree[i][j].get(t) / 2;
-                            tree[i][j].set(t, 0);
+                            tree[i][j].remove(t--);
                         }
                     }
                 }
@@ -104,7 +104,7 @@ public class Main {
                                 int ni = i + d[0];
                                 int nj = j + d[1];
                                 if(ni >= 0 && ni < N && nj >= 0 && nj < N){
-                                    tree[i][j].add(1);
+                                    tree[ni][nj].add(1);
                                 }
                             }
                         }
@@ -118,23 +118,20 @@ public class Main {
                 }
             }
 
-            System.out.println("======ground======");
-            for(int i = 0; i < N; i++){
-                for(int j = 0; j < N; j++){
-                    System.out.print(ground[i][j] + " ");
-                }
-                System.out.println();
-            }
-            System.out.println("==================");
-            for(int i = 0; i < N; i++){
-                for(int j = 0; j < N; j++){
-                    for(int t : tree[i][j]){
-                        System.out.print(t + "|");
-                    }
-                    System.out.println("\t");
-                }
-                System.out.println();
-            }
+//            System.out.println("======ground======");
+//            for(int i = 0; i < N; i++){
+//                for(int j = 0; j < N; j++){
+//                    System.out.print(ground[i][j] + " ");
+//                }
+//                System.out.println();
+//            }
+//            System.out.println("==================");
+//            for(int i = 0; i < N; i++){
+//                for(int j = 0; j < N; j++){
+//                    System.out.print(tree[i][j].size() + " ");
+//                }
+//                System.out.println();
+//            }
         }
 
         // 살아남은 나무의 수 계산
