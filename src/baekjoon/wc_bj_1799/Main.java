@@ -14,19 +14,17 @@ public class Main {
         N = Integer.parseInt(br.readLine());
         board = new int[N][N];
 
-        int left = 0;
         for(int i = 0; i < N; i++){
             st = new StringTokenizer(br.readLine());
             for(int j = 0; j < N; j++){
                 board[i][j] = Integer.parseInt(st.nextToken());
-                if(board[i][j] == 1) ++left;
             }
         }
 
-        System.out.println(backT(0, 0, left));
+        System.out.println(backT(0, 0) + (backT(1, 0)));
     }
 
-    private static int backT(int pos, int num, int left) {
+    private static int backT(int pos, int num) {
         if(pos >= N*N){
             return num;
         }
@@ -34,32 +32,30 @@ public class Main {
         int i = pos / N;
         int j = pos % N;
 
-        if(board[i][j] == 2) return backT(pos + 1, num, left - 1);
+        do ++pos;
+        while((pos/N + pos % N) % 2 != (i + j) % 2);
 
-        int max = 0;
-        int checked = check(i, j);
-        if(checked != -1){
+        int max = backT(pos, num);
+        if(check(i,j)){
             board[i][j] = 2;
-            max = backT(pos + 1, num + 1, left - checked);
+            max = Math.max(max, backT(pos, num + 1));
             board[i][j] = 1;
         }
-        max = Math.max(max, backT(pos + 1, num, left - 1));
 
         return max;
     }
 
-    private static int check(int i, int j) {
-        int res = 1;
+    private static boolean check(int i, int j) {
+        if(board[i][j] != 1) return false;
         for(int[] d : dir){
             int ni = i + d[0];
             int nj = j + d[1];
             while(ni >= 0 && ni < N && nj >= 0 && nj < N){
-                if(board[ni][nj] == 2) return -1;
-                else if(board[ni][nj] == 1) ++res;
+                if(board[ni][nj] == 2) return false;
                 ni += d[0];
                 nj += d[1];
             }
         }
-        return res;
+        return true;
     }
 }

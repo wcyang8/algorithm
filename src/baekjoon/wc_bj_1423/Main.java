@@ -2,9 +2,7 @@ package baekjoon.wc_bj_1423;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * 요약 
@@ -20,8 +18,8 @@ import java.util.StringTokenizer;
  * 2. 레벨이 높다고 항상 힘이 높지 않음.
  * 
  * 풀이
- * 1. (from, gap, getStr) 을 pq에 넣는다. 
- * 2. pq는 (얻는 힘 / 레벨업)이 높은 순으로 배열. 
+ * 1. (from, gap, getStr) 을 dp에 넣는다.
+ * 2. dp는 (얻는 힘 / 레벨업)이 높은 순으로 배열.
  * 3. -면 그냥 현재 값을 리턴
  * 
  * 테케
@@ -79,32 +77,43 @@ public class Main {
 
 		int D = Integer.parseInt(br.readLine());
 
-		PriorityQueue<levelUp> pq = new PriorityQueue<>();
+//		PriorityQueue<levelUp> dp = new PriorityQueue<>();
+		List<levelUp> dp = new ArrayList<>();
 
 		for (int i = 0; i < N; i++) {
 			for (int j = i + 1; j < N; j++) {
-				pq.add(new levelUp(i, j - i, strByLevel[j] - strByLevel[i]));
+				dp.add(new levelUp(i, j - i, strByLevel[j] - strByLevel[i]));
 			}
 		}
 
-		while (!pq.isEmpty()) {
-			System.out.println(pq.peek());
-			levelUp cur = pq.poll(); // 효율이 가장 좋은 레벨업
-			if (cur.getStr <= 0 || D == 0)
-				break;
+		Collections.sort(dp);
 
+		int pos = 0;
+		while (dp.get(pos).getStr > 0 && D > 0 && pos < dp.size()) {
+//			System.out.println(dp.get(pos));
+			levelUp cur = dp.get(pos); // 효율이 가장 좋은 레벨업
+//			if (cur.getStr <= 0 || D == 0)
+//				break;
+
+			++pos;
 			if (playersByLevel[cur.from] > 0) { // 그 레벨업의 시작에 캐릭터가 있으면
 				int time = D / cur.gap;			// 그 레벨업을 몇번 할 수 있는가?
 				int temp = Math.min(time, playersByLevel[cur.from]);		// D의 가능한 레벨업 횟수 vs 그 레벨 유저 수
 				D -= temp * cur.gap;									// D에서 빼준다.
 				playersByLevel[cur.from] -= temp;						// 레벨업 전 유저 수에서 빼준다.
 				playersByLevel[cur.from + cur.gap] += temp;				// 레벨업 후 유저 수에 더해준다.
+
+				if(temp > 0) {
+//					System.out.println(temp);
+					pos = 0;
+				}
 			}
 		}
 		System.out.println(Arrays.toString(playersByLevel));
 		long sum = 0;
 		for (int i = 0; i < N; i++) {
 			sum += (long)playersByLevel[i] * (long)strByLevel[i];
+//			System.out.println(sum);
 		}
 		System.out.println(sum);
 	}
